@@ -1,4 +1,5 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
+import api from '../services/api';
 
 const AuthContext = createContext(null);
 
@@ -7,13 +8,23 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Check for stored token and validate it
-    const token = localStorage.getItem('token');
-    if (token) {
-      // Validate token and set user
-      // This is where you'd typically make an API call to validate the token
-    }
-    setLoading(false);
+    const initAuth = async () => {
+      const token = localStorage.getItem('token');
+      if (token) {
+        try {
+          // Validate token and get user data
+          const response = await api.get('/auth/me');
+          setUser(response.data);
+        } catch (error) {
+          // If token is invalid, clear it
+          localStorage.removeItem('token');
+          setUser(null);
+        }
+      }
+      setLoading(false);
+    };
+
+    initAuth();
   }, []);
 
   const login = (userData, token) => {

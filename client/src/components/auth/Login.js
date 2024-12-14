@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import api from '../../services/api';
 import {
@@ -9,6 +9,7 @@ import {
   Typography,
   Container,
   Alert,
+  Link as MuiLink,
 } from '@mui/material';
 
 const Login = () => {
@@ -42,7 +43,7 @@ const Login = () => {
           Sign in
         </Typography>
         {error && <Alert severity="error" sx={{ mt: 2, width: '100%' }}>{error}</Alert>}
-        <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1 }}>
+        <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1, width: '100%' }}>
           <TextField
             margin="normal"
             required
@@ -75,6 +76,14 @@ const Login = () => {
           >
             Sign In
           </Button>
+          <Box sx={{ textAlign: 'center', mt: 2 }}>
+            <Typography variant="body2">
+              Don't have an account?{' '}
+              <MuiLink component={Link} to="/register" variant="body2">
+                Register here
+              </MuiLink>
+            </Typography>
+          </Box>
         </Box>
       </Box>
     </Container>
