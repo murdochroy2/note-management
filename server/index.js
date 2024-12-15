@@ -9,11 +9,18 @@ const teamRoutes = require('./routes/teams');
 
 const app = express();
 
-// CORS configuration
+// CORS configuration with more specific options
 app.use(cors({
   origin: process.env.FRONTEND_URL || 'http://localhost:3000',
-  credentials: true
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true,
+  preflightContinue: false,
+  optionsSuccessStatus: 204
 }));
+
+// Handle preflight requests
+app.options('*', cors());
 
 app.use(express.json());
 
