@@ -1,5 +1,9 @@
 # Instructions
 
+## Deployed Application
+* Visit the link https://note-management-plivo.vercel.app 
+
+## Local Setup
 1. Clone this github repository
 2. Go to the directory backend.
 3. Run the commands `npm install` and `npm start`
