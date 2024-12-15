@@ -1,7 +1,24 @@
 const express = require('express');
 const router = express.Router();
 const Note = require('../models/Note');
+const Team = require('../models/Team');
 const auth = require('../middleware/auth');
+
+// Add this function
+async function getUserTeams(userId) {
+  try {
+    const teams = await Team.find({
+      $or: [
+        { owner: userId },
+        { members: userId }
+      ]
+    });
+    return teams.map(team => team._id);
+  } catch (error) {
+    console.error('Error getting user teams:', error);
+    return [];
+  }
+}
 
 // Get all notes for user
 router.get('/', auth, async (req, res) => {
@@ -67,16 +84,20 @@ router.put('/:id', auth, async (req, res) => {
 router.delete('/:id', auth, async (req, res) => {
   try {
     const note = await Note.findById(req.params.id);
-    if (!note) return res.status(404).json({ message: 'Note not found' });
     
-    // Check ownership
-    if (note.owner.toString() !== req.user.userId) {
-      return res.status(403).json({ message: 'Not authorized' });
+    if (!note) {
+      return res.status(404).json({ message: 'Note not found' });
     }
 
-    await note.remove();
-    res.json({ message: 'Note removed' });
+    // Check if user owns the note
+    if (note.owner.toString() !== req.user.userId) {
+      return res.status(403).json({ message: 'Not authorized to delete this note' });
+    }
+
+    await Note.findByIdAndDelete(req.params.id);
+    res.json({ message: 'Note deleted' });
   } catch (error) {
+    console.error('Error deleting note:', error);
     res.status(500).json({ message: 'Server error' });
   }
 });
