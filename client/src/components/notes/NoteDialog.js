@@ -16,20 +16,20 @@ const NoteDialog = ({ open, onClose, onSave, note }) => {
   });
 
   useEffect(() => {
-    if (note) {
+    if (open && note) {
       setFormData({
         title: note.title,
         content: note.content,
         category: note.category || '',
       });
-    } else {
+    } else if (!open) {
       setFormData({
         title: '',
         content: '',
         category: '',
       });
     }
-  }, [note]);
+  }, [open, note]);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
