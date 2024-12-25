@@ -40,7 +40,10 @@ const Register = () => {
   return (
     <Container maxWidth="sm">
       <Box sx={{ mt: 8, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-        <Typography component="h1" variant="h5">
+        <Typography component="h1" variant="h3" sx={{ mb: 3 }}>
+          Note Manager ✍
+        </Typography>
+        <Typography component="h2" variant="h5">
           Register
         </Typography>
         {error && <Alert severity="error" sx={{ mt: 2, width: '100%' }}>{error}</Alert>}
